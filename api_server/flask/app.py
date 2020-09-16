@@ -56,16 +56,12 @@ def uploaded_file(path):
 @app.route('/v1/twitterCredentials', methods = ["GET", "POST"])
 def tweetCredentials(supports_credentials=True):
     if request.method == 'POST':
-        print(request)
-        print(request.form.get('accessToken'))
         session['accessToken'] = request.form.get('accessToken')
         session['secret'] = request.form.get('secret')
-        print(session)
         return {
             "status": "ok"
         }
     else :
-        print(session)
         credentials = {
             'accessToken': session.get('accessToken'),
             'secret': session.get('secret')
@@ -85,6 +81,7 @@ def tweet():
         request.form.get('description'),
         os.path.join(UPLOAD_FOLDER, str(request.form.get('filename')))
     )
+    
     return "OK"
 
 if __name__ == "__main__":

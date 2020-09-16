@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import Modal from 'react-awesome-modal';
 import Converter from './Converter';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 
 const TUTTER_HOST_URL = 'http://localhost:5000';
 
@@ -32,37 +34,36 @@ class TweetModal extends Component {
     this.setState({text: event.target.value});
   }
 
-  handleSubmit (event) {
+  handleSubmit (event) {    
     if (this.state.filename == null) {
       alert('先に画像をアップロードしてください');
       event.preventDefault();
     } else {
-      console.log(this.state.filename)
+      let description = this.state.text
       axios
       .get(TUTTER_HOST_URL + "/v1/twitterCredentials", {withCredentials: true})
       .then(response => {
         const params = new FormData();
         params.append('accessToken', response.data['accessToken']);
         params.append('secret', response.data['secret']);
-        params.append('description', this.state.text);
+        params.append('description', description);
         params.append('filename', this.state.filename); 
 
         axios
         .post(TUTTER_HOST_URL + "/v1/tweet", params)
         .then(response => {
           console.log(response);
-          console.log("handleSubmit successed");
         })
         .catch(() => {
           console.log('handleSubmit failed');
         });
       })
       .catch(() => {
+        alert('投稿できませんでした\n 再度ログインしてお試しください');
         console.log('twitterCredentials failed');
       });
-    
       this.setState({text: ""});
-      alert('投稿しました！');
+      alert('投稿しました!');
       event.preventDefault();
     }
   }
@@ -74,17 +75,23 @@ class TweetModal extends Component {
   render() {
     return (
       <div className="Tweet">
-      <input type="button" value="tweet" onClick={() => this.openModal()} />
+      <Button variant="info" type="button" size="lg" block onClick={() => this.openModal()}>ツイートする</Button>
       <Modal visible={this.state.visible} width="1200" height="600" effect="fadeInDown" onClickAway={() => this.closeModal()}>
         <div>
           <h3>投稿画像を選択</h3>
           <Converter setFilename={this.setFilename} />
-          <h3>ツイートの投稿内容 (140字以内)</h3>
           <form onSubmit={this.handleSubmit}> 
-            <textarea value={this.state.text} onChange={this.handleChange} />
-            <input type="submit" value="投稿！"/>
+            <div className="textArea">
+              <Form>
+                <Form.Group controlId="exampleForm.ControlTextarea1">
+                  <Form.Label><h3>ツイートの投稿内容 (140字以内)</h3></Form.Label>
+                  <Form.Control as="textarea" rows="3" onChange={this.handleChange} />
+                </Form.Group>
+              </Form>
+            </div>
+            <Button variant="info" type="submit">投稿</Button>
           </form>
-          <p><a href="" onClick={() => this.closeModal()}>Close</a></p>
+          <Button variant="dark" onClick={() => this.closeModal()}>閉じる</Button>
         </div>
       </Modal>
       </div>

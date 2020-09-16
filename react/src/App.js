@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import TwitterAuth from './components/TwitterAuth';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 // TODO : リファクタしたい、設計全体的に見直し
 class App extends Component {
