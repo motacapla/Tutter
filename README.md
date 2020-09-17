@@ -1,4 +1,6 @@
 # Tutter
+![alt text](https://github.com/motacapla/Tutter/blob/master/react/public/Tutter-logo-blue.png?raw=true)
+
 Authenticate with twitter account, convert image and tweet with it.
 
 
