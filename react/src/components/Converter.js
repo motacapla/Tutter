@@ -22,7 +22,6 @@ class Converter extends Component {
     };
 
     sendFile() {
-        this.setState({isLoading: true});
         const params = new FormData();
         params.append('file', this.state.file);
         axios
@@ -37,7 +36,6 @@ class Converter extends Component {
           )
           .then(response => {
             this.setState({
-              isLoading: false,
               savedFilename: response.data['filename']
             });
             this.setFilename();

@@ -11,6 +11,7 @@
   margin-top: 3em;
   margin-left: 3em;
   margin-right: 3em;
+  height: 800px;
 }
 
 .AppFooter {
@@ -19,6 +20,7 @@
   text-align: center;
   background-color: #212333;
   color: white;
+  height: 300px;
 }
 
 .Logo {
@@ -26,7 +28,7 @@
   height: 300px;
 }
 
-.LoginButton {
+.Button {
   -moz-appearance: none;
   -webkit-appearance: none;
   -o-appearance: none;
@@ -37,7 +39,6 @@
   -o-transition: background-color 0.2s ease-in-out;
   -ms-transition: background-color 0.2s ease-in-out;
   transition: background-color 0.2s ease-in-out;
-  background: #1DA1F2;
   border-radius: 40px;
   border: 0;
   color: white;
@@ -52,11 +53,27 @@
   margin-top: 20px;
 }
 
+.BackgroundBlue {
+  background: #1DA1F2;
+}
+
 .LoginLogo{
   background: #1DA1F2;
   max-width: 50px; 
 }
 
-.LogoutButton {
-  border-radius: 100px;
+.BackgroundDarkBlue {
+  background: #212333;
+}
+
+.BackgroundOrange {
+  background: rgb(235, 91, 43);
+}
+
+.BackgroundGray {
+  background: rgb(99, 99, 99);
+}
+
+.ImageForm {
+  margin-top: 1em; 
 }

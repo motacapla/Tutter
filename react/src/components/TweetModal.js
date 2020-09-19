@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import Modal from 'react-awesome-modal';
 import Converter from './Converter';
-import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import Collapse from 'react-bootstrap/Collapse';
 
 const TUTTER_HOST_URL = 'http://localhost:5000';
 
@@ -34,12 +33,8 @@ class TweetModal extends Component {
     this.setState({text: event.target.value});
   }
 
-  handleSubmit (event) {    
-    if (this.state.filename == null) {
-      alert('先に画像をアップロードしてください');
-      event.preventDefault();
-    } else {
-      let description = this.state.text
+  handleSubmit (event) {
+    let description = this.state.text
       axios
       .get(TUTTER_HOST_URL + "/v1/twitterCredentials", {withCredentials: true})
       .then(response => {
@@ -64,36 +59,49 @@ class TweetModal extends Component {
       });
       this.setState({text: ""});
       alert('投稿しました!');
-      event.preventDefault();
-    }
+      window.location.reload(true);
   }
 
   setFilename (filename) {
     this.setState({filename: filename});
   }
 
+  setOpenTweetForm () {
+    this.setState({openTweetForm: !this.state.openTweetForm});
+  }
+
   render() {
     return (
-      <div className="Tweet">
-      <Button variant="info" type="button" size="lg" block onClick={() => this.openModal()}>ツイートする</Button>
-      <Modal visible={this.state.visible} width="1200" height="600" effect="fadeInDown" onClickAway={() => this.closeModal()}>
-        <div>
-          <h3>投稿画像を選択</h3>
-          <Converter setFilename={this.setFilename} />
-          <form onSubmit={this.handleSubmit}> 
-            <div className="textArea">
+      <div className="TweetBody">      
+      <button className="BackgroundBlue Button"
+        onClick={() => this.setOpenTweetForm()}
+        aria-expanded={this.state.openTweetForm}
+      >
+        ツイートする
+      </button>
+      <Collapse in = {this.state.openTweetForm}>
+        <div className="TweetForm">
+          <div className="ImageForm">
+            <h3>投稿画像を選択</h3>
+            <Converter setFilename = {this.setFilename} />
+          </div>
+          <div className="DescriptionForm">
+          <Collapse in = {this.state.filename}>
+          <form onSubmit={this.handleSubmit}>
+            <div className="TextArea">
               <Form>
-                <Form.Group controlId="exampleForm.ControlTextarea1">
+                <Form.Group controlId="ControlTextarea1">
                   <Form.Label><h3>ツイートの投稿内容 (140字以内)</h3></Form.Label>
                   <Form.Control as="textarea" rows="3" onChange={this.handleChange} />
                 </Form.Group>
               </Form>
             </div>
-            <Button variant="info" type="submit">投稿</Button>
+            <button className="BackgroundOrange Button" type="submit">投稿！</button>
           </form>
-          <Button variant="dark" onClick={() => this.closeModal()}>閉じる</Button>
+          </Collapse>
+          </div>          
         </div>
-      </Modal>
+      </Collapse>
       </div>
     );
   }  
