@@ -43,10 +43,13 @@ class TweetModal extends Component {
         params.append('secret', response.data['secret']);
         params.append('description', description);
         params.append('filename', this.state.filename); 
+
+        console.log()
+
         axios
         .post(TUTTER_HOST_URL + "/v1/tweet", params)
           .then(() => {
-            alert("投稿しました!");
+            alert("投稿しました!\n 自動的に戻ります");
           })
           .catch(() => {
             console.log('handleSubmit failed');
@@ -61,7 +64,7 @@ class TweetModal extends Component {
       this.setState({text: ""});
       setTimeout(() => {
         window.location.reload(true);
-      }, 2000);
+      }, 5000);
   }
 
   setFilename (filename) {
