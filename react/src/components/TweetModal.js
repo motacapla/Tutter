@@ -43,23 +43,25 @@ class TweetModal extends Component {
         params.append('secret', response.data['secret']);
         params.append('description', description);
         params.append('filename', this.state.filename); 
-
         axios
         .post(TUTTER_HOST_URL + "/v1/tweet", params)
-        .then(response => {
-          console.log(response);
-        })
-        .catch(() => {
-          console.log('handleSubmit failed');
-        });
+          .then(() => {
+            alert("投稿しました!");
+          })
+          .catch(() => {
+            console.log('handleSubmit failed');
+            alert('投稿できませんでした\n 再度ログインしてお試しください');
+          });
       })
       .catch(() => {
         alert('投稿できませんでした\n 再度ログインしてお試しください');
         console.log('twitterCredentials failed');
       });
+      event.preventDefault();
       this.setState({text: ""});
-      alert('投稿しました!');
-      window.location.reload(true);
+      setTimeout(() => {
+        window.location.reload(true);
+      }, 2000);
   }
 
   setFilename (filename) {

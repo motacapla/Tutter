@@ -2,22 +2,20 @@ import os
 import cv2
 import random
 import string
+import config
 import numpy as np
 from flask import Flask, request, redirect, url_for, send_from_directory, render_template, session
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
 from datetime import datetime
-from image_process import canny
-from image_converter import background_eliminate, background_eliminate_type0
+import image_converter
 from post_twitter import post_with_large_file
 
-UPLOAD_FOLDER = './uploads'
-
-if not os.path.isdir(UPLOAD_FOLDER):
-    os.mkdir(UPLOAD_FOLDER)
+if not os.path.isdir(config.UPLOAD_FOLDER):
+    os.mkdir(config.UPLOAD_FOLDER)
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['UPLOAD_FOLDER'] = config.UPLOAD_FOLDER
 app.secret_key = "".join([random.choice(string.ascii_letters + string.digits + '_' + '-' + '!' + '#' + '&')
                           for i in range(64)])
 CORS(app, supports_credentials=True)
@@ -34,18 +32,24 @@ def upload():
         img_array = np.asarray(bytearray(stream.read()), dtype=np.uint8)
         img = cv2.imdecode(img_array, 1)
 
-        # TODO : I NEED SOME HELP!
-        #img = canny(img)
-        #img = background_eliminate_type0(img)
+        img = image_converter.resize_img(img)
 
         dt_now = datetime.now().strftime("%Y_%m_%H_%M_%S_") + random_str(5)
-        save_path = os.path.join(UPLOAD_FOLDER, dt_now + ".png")
+        save_path = os.path.join(config.UPLOAD_FOLDER, "original_" + dt_now + ".png")
         cv2.imwrite(save_path, img)
+
+        # TODO : I NEED SOME HELP!
+        #img = background_eliminate_type0(img)
+        #dt_now = datetime.now().strftime("%Y_%m_%H_%M_%S_") + random_str(5)
+        #save_path = os.path.join(UPLOAD_FOLDER, dt_now + ".png")
+        #cv2.imwrite(save_path, img)
+
+        #save_path = image_converter.call_remove_bg_api(dt_now, save_path)
 
         print("save", save_path)
 
         response = {
-            "filename": dt_now + ".png"
+            "filename": save_path.split('/')[-1]
         }
         return response
 
@@ -58,10 +62,13 @@ def tweetCredentials(supports_credentials=True):
     if request.method == 'POST':
         session['accessToken'] = request.form.get('accessToken')
         session['secret'] = request.form.get('secret')
-        return {
-            "status": "ok"
+        credentials = {
+            "accessToken": session['accessToken'],
+            "secret": session['secret']
         }
+        return credentials
     else :
+        print(session)        
         credentials = {
             'accessToken': session.get('accessToken'),
             'secret': session.get('secret')
@@ -70,6 +77,7 @@ def tweetCredentials(supports_credentials=True):
 
 @app.route('/v1/tweet', methods = ["POST"])
 def tweet():
+    print('/v1/tweet')
     print(request.form.get('accessToken'))
     print(request.form.get('secret'))
     print(request.form.get('description'))
@@ -79,7 +87,7 @@ def tweet():
         request.form.get('accessToken'),
         request.form.get('secret'),
         request.form.get('description'),
-        os.path.join(UPLOAD_FOLDER, str(request.form.get('filename')))
+        os.path.join(config.UPLOAD_FOLDER, str(request.form.get('filename')))
     )
     
     return "OK"

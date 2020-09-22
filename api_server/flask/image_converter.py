@@ -5,6 +5,34 @@ import torch
 import torchvision
 from torchvision import transforms
 import os
+import config
+import math
+import requests
+
+def resize_img(img):
+    img_height, img_width = img.shape[:2]
+    long_side_size = min(600, max(img_height, img_width))
+    if img_height < img_width:        
+        scale = img_width / long_side_size
+        size = (long_side_size, math.ceil(img_height / scale))
+    else:
+        scale = img_height / long_side_size
+        size = (math.ceil(img_width / scale), long_side_size)
+    return cv2.resize(img, size, interpolation=cv2.INTER_CUBIC)    
+
+def call_remove_bg_api(dt_now, path):
+    response = requests.post(
+        'https://api.remove.bg/v1.0/removebg',
+        files = {'image_file': open(path, 'rb')},
+        data = {'size': 'auto'},
+        headers = {'X-Api-Key': config.REMOVE_BG_KEY},
+    )
+    
+    filepath = os.path.join(config.UPLOAD_FOLDER, "no_bg_" + dt_now + ".png")
+    with open(filepath, 'wb') as out:
+        out.write(response.content)
+        
+    return filepath
 
 def background_eliminate(img):
     BLUR = 21
