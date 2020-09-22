@@ -44,7 +44,7 @@ def upload():
         #save_path = os.path.join(UPLOAD_FOLDER, dt_now + ".png")
         #cv2.imwrite(save_path, img)
 
-        #save_path = image_converter.call_remove_bg_api(dt_now, save_path)
+        save_path = image_converter.call_remove_bg_api(dt_now, save_path)
 
         print("save", save_path)
 
