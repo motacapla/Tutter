@@ -7,7 +7,7 @@ Authenticate with twitter account, convert image and tweet with it.
 
 
 ## Requirements
-### Create api_server/config.py
+### Create api_server/flask/config.py
 ```
 CONSUMER_KEY = '<twitter consumer key here>'
 CONSUMER_SECRET = '<twitter consumer secret here>'
