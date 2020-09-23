@@ -1,0 +1,15 @@
+[Unit]
+Description = tutter uWSGI
+After = syslog.target
+
+[Service]
+WorkingDirectory = /home/ubuntu/tutter/api_server/flask
+ExecStart = /home/ubuntu/tutter/api_server/flask/tutter/bin/uwsgi --http=0.0.0.0:5000 --wsgi-file=app.py --callable=app
+Restart=always
+KillSignal=SIGQUIT
+Type=notify
+StandardError=syslog
+NotifyAccess=all
+
+[Install]
+WantedBy=multi-user.target
