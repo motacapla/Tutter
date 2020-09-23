@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import firebase, { provider } from '../config';
+import firebase, { provider } from '../FirebaseConfig';
 import '../App.js'
 import axios from 'axios';
 import TweetModal from './TweetModal';
 import Image from 'react-bootstrap/Image';
-
-const API_SERVER_HOST_URL = 'http://localhost:5000';
+import {API_SERVER_HOST_URL} from './Config';
 
 class TwitterAuth extends Component {
   constructor(props) {

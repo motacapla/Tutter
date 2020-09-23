@@ -3,8 +3,7 @@ import axios from 'axios';
 import Converter from './Converter';
 import Form from 'react-bootstrap/Form';
 import Collapse from 'react-bootstrap/Collapse';
-
-const TUTTER_HOST_URL = 'http://localhost:5000';
+import {API_SERVER_HOST_URL} from './Config';
 
 class TweetModal extends Component {
   constructor(props) {
@@ -36,7 +35,7 @@ class TweetModal extends Component {
   handleSubmit (event) {
     let description = this.state.text
       axios
-      .get(TUTTER_HOST_URL + "/v1/twitterCredentials", {withCredentials: true})
+      .get(API_SERVER_HOST_URL + "/v1/twitterCredentials", {withCredentials: true})
       .then(response => {
         const params = new FormData();
         params.append('accessToken', response.data['accessToken']);
@@ -47,7 +46,7 @@ class TweetModal extends Component {
         console.log()
 
         axios
-        .post(TUTTER_HOST_URL + "/v1/tweet", params)
+        .post(API_SERVER_HOST_URL + "/v1/tweet", params)
           .then(() => {
             alert("投稿しました!\n 自動的に戻ります");
           })
