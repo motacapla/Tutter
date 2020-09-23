@@ -13,7 +13,7 @@ CONSUMER_KEY = '<twitter consumer key here>'
 CONSUMER_SECRET = '<twitter consumer secret here>'
 ```
 
-### Create react/src/config.js
+### Create react/src/components/FirebaseConfig.js
 ```
 import firebase from 'firebase/app';
 import 'firebase/auth';
@@ -26,4 +26,12 @@ firebase.initializeApp({
 
 export const provider = new firebase.auth.TwitterAuthProvider();
 export default firebase;
+```
+
+### Create react/src/components/Config.js
+Please specify the below url to communicate with api server
+```
+export const API_SERVER_HOST_URL = 'http://54.178.4.190:5000';
+
+export default API_SERVER_HOST_URL;
 ```
