@@ -3,15 +3,19 @@
 }
 
 .AppHeader {
-  background-image: url(./pic01.jpg);
-  height: 600px;
+  background-image: url(./appHeaderBackgroundImage.jpg);
+  background-repeat: no-repeat;
+  background-position: center
+}
+
+.AppHeaderDescription {
+  color: white;
 }
 
 .AppBody {
   margin-top: 3em;
   margin-left: 3em;
   margin-right: 3em;
-  height: 800px;
 }
 
 .AppFooter {
@@ -20,7 +24,6 @@
   text-align: center;
   background-color: #212333;
   color: white;
-  height: 300px;
 }
 
 .Logo {
@@ -51,6 +54,7 @@
   font-weight: 600;
   min-width: 10em;
   margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .BackgroundBlue {

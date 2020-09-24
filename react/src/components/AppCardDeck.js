@@ -7,12 +7,11 @@ class AppCardDeck extends Component {
         return (
           <CardDeck>
           <Card>
-            <Card.Img variant="top" src={`${process.env.PUBLIC_URL}/3.jpg`} />
+            <Card.Img variant="top" src={`${process.env.PUBLIC_URL}/original.jpg`} />
             <Card.Body>
-              <Card.Title>Card title</Card.Title>
+              <Card.Title>釣った魚の写真を撮る</Card.Title>
               <Card.Text>
-                This is a wider card with supporting text below as a natural lead-in to
-                additional content. This content is a little bit longer.
+                釣った魚の写真を撮って、Tutterにアップロードしましょう
               </Card.Text>
             </Card.Body>
             <Card.Footer>
@@ -20,12 +19,11 @@ class AppCardDeck extends Component {
             </Card.Footer>
           </Card>
           <Card>
-            <Card.Img variant="top" src={`${process.env.PUBLIC_URL}/7.jpg`} />
+            <Card.Img variant="top" src={`${process.env.PUBLIC_URL}/converted.jpg`} />
             <Card.Body>
-              <Card.Title>Card title</Card.Title>
+              <Card.Title>写真から魚拓を自動生成</Card.Title>
               <Card.Text>
-                This card has supporting text below as a natural lead-in to additional
-                content.{' '}
+                アップロードされた写真を自動的に加工され、魚拓が作られます。
               </Card.Text>
             </Card.Body>
             <Card.Footer>
@@ -33,13 +31,11 @@ class AppCardDeck extends Component {
             </Card.Footer>
           </Card>
           <Card>
-            <Card.Img variant="top" src={`${process.env.PUBLIC_URL}/4.jpg`} />
+            <Card.Img variant="top" src={`${process.env.PUBLIC_URL}/tweet.jpg`} />
             <Card.Body>
-              <Card.Title>Card title</Card.Title>
+              <Card.Title>魚拓をそのままツイート</Card.Title>
               <Card.Text>
-                This is a wider card with supporting text below as a natural lead-in to
-                additional content. This card has even longer content than the first to
-                show that equal height action.
+                そのままツイートの文章を入力して、画像付きの投稿が可能です。
               </Card.Text>
             </Card.Body>
             <Card.Footer>
