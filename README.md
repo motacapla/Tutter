@@ -2,14 +2,17 @@
 http://tutter.org/
 ![alt text](https://github.com/motacapla/Tutter/blob/master/react/public/Tutter-logo-blue.png?raw=true)
 
+
 Tutter is a web application to convert fish photo.
+
 User can easily tweet with extracted image.
 
 ## Requirements
 
 ### Backend
+```
 $ pip -t requirements.txt
-
+```
 #### Create api/flask/config.py
 Twitter API key and secret are needed
 ```
@@ -17,9 +20,10 @@ CONSUMER_KEY = '<twitter consumer key here>'
 CONSUMER_SECRET = '<twitter consumer secret here>'
 ```
 ### Frontend
+```
 $ npm install -g firebase-tools
 $ npm install react-bootstrap bootstrap
-
+```
 #### Create react/src/components/FirebaseConfig.js
 Authentication is based on firebase SDK
 ```
