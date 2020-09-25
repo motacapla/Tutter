@@ -1,4 +1,0 @@
-{
-    "python.pythonPath": "/usr/local/var/pyenv/shims/python",
-    "python.linting.pylintArgs": ["--extension-pkg-whitelist=cv2"]
-}
