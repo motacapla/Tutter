@@ -2,14 +2,15 @@ import os
 import cv2
 import random
 import string
-import config
 import numpy as np
 from flask import Flask, request, redirect, url_for, send_from_directory, render_template, session
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
 from datetime import datetime
-import image_converter
 from post_twitter import post_with_large_file
+import config
+import environment
+import image_converter
 
 debug = False
 
@@ -95,9 +96,11 @@ def tweet():
     return "OK"
 
 if __name__ == "__main__":
-    if debug:
+    if environment.HOST == "DEV":
         app.run(debug=True)
-    else :
+    elif environment.HOST == "PROD" :
         app.run(host='0.0.0.0', port='5001')
+    else:
+        print("Something wrong")
 
 application = app
