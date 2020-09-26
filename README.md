@@ -1,19 +1,31 @@
 # Tutter
+http://tutter.org/
 ![alt text](https://github.com/motacapla/Tutter/blob/master/react/public/Tutter-logo-blue.png?raw=true)
 
-http://tutter.org/
 
-Authenticate with twitter account, convert image and tweet with it.
+Tutter is a web application to convert fish photo.
 
+User can easily tweet with extracted image.
 
 ## Requirements
-### Create api_server/flask/config.py
+
+### Backend
+```
+$ pip -t requirements.txt
+```
+#### Create api/flask/config.py
+Twitter API key and secret are needed
 ```
 CONSUMER_KEY = '<twitter consumer key here>'
 CONSUMER_SECRET = '<twitter consumer secret here>'
 ```
-
-### Create react/src/components/FirebaseConfig.js
+### Frontend
+```
+$ npm install -g firebase-tools
+$ npm install react-bootstrap bootstrap
+```
+#### Create react/src/components/FirebaseConfig.js
+Authentication is based on firebase SDK
 ```
 import firebase from 'firebase/app';
 import 'firebase/auth';
@@ -28,10 +40,10 @@ export const provider = new firebase.auth.TwitterAuthProvider();
 export default firebase;
 ```
 
-### Create react/src/components/Config.js
+#### Create react/src/components/Config.js
 Please specify the below url to communicate with api server
 ```
-export const API_SERVER_HOST_URL = 'http://54.178.4.190:5000';
+export const API_SERVER_HOST_URL = 'http://tutter.org:5000';
 
 export default API_SERVER_HOST_URL;
 ```
