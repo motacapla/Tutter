@@ -12,18 +12,13 @@ import config
 import environment
 import image_converter
 
-debug = False
-
-if not os.path.isdir(config.UPLOAD_FOLDER):
-    os.mkdir(config.UPLOAD_FOLDER)
-
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = config.UPLOAD_FOLDER
+app.config['UPLOAD_FOLDER'] = environment.UPLOAD_FOLDER
 app.secret_key = "".join([random.choice(string.ascii_letters + string.digits + '_' + '-' + '!' + '#' + '&')
                           for i in range(64)])
 CORS(app, supports_credentials=True)
 
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'gif'])
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 def random_str(n):
     return ''.join([random.choice(string.ascii_letters + string.digits) for i in range(n)])
@@ -38,30 +33,35 @@ def upload():
         img = image_converter.resize_img(img)
 
         dt_now = datetime.now().strftime("%Y_%m_%H_%M_%S_") + random_str(5)
-        save_path = os.path.join(config.UPLOAD_FOLDER, "original_" + dt_now + ".png")
+        save_path = os.path.join(app.config['UPLOAD_FOLDER'], "original_" + dt_now + ".png")
         cv2.imwrite(save_path, img)
 
-        # TODO : I NEED SOME HELP!
-        #img = background_eliminate_type0(img)
-        #dt_now = datetime.now().strftime("%Y_%m_%H_%M_%S_") + random_str(5)
-        #save_path = os.path.join(UPLOAD_FOLDER, dt_now + ".png")
-        #cv2.imwrite(save_path, img)
+        remove_bg_save_path = image_converter.call_remove_bg_api(dt_now, save_path)
 
-        save_path = image_converter.call_remove_bg_api(dt_now, save_path)
-
-        print("save", save_path)
-
+        converted_img_save_path = image_converter.convert_image_to_gyotaku(dt_now, remove_bg_save_path)
+                
         response = {
-            "filename": save_path.split('/')[-1]
+            "filenameList": [converted_img_save_path.split('/')[-1], remove_bg_save_path.split('/')[-1]]
         }
         return response
 
 @app.route('/v1/image/<path:path>', methods = ["GET"])
-def uploaded_file(path):
+def get_image(path):
     return send_from_directory(app.config['UPLOAD_FOLDER'], path)
 
+@app.route('/v1/images', methods = ["GET"])
+def get_images_url():
+    def create_image_response(filename):
+        return {
+            "filename": filename,
+            "url": environment.API_SERVER_HOST_URL + app.config['UPLOAD_FOLDER'].split('.')[-1] + '/' + filename
+        }
+    return {
+        "images": [create_image_response(filename) for filename in request.args.get('filenameList').split(',')]
+    }
+
 @app.route('/v1/twitterCredentials', methods = ["GET", "POST"])
-def tweetCredentials(supports_credentials=True):
+def tweet_credentials(supports_credentials=True):
     if request.method == 'POST':
         session['accessToken'] = request.form.get('accessToken')
         session['secret'] = request.form.get('secret')
@@ -71,7 +71,6 @@ def tweetCredentials(supports_credentials=True):
         }
         return credentials
     else :
-        print(session)        
         credentials = {
             'accessToken': session.get('accessToken'),
             'secret': session.get('secret')
@@ -80,22 +79,18 @@ def tweetCredentials(supports_credentials=True):
 
 @app.route('/v1/tweet', methods = ["POST"])
 def tweet():
-    print('/v1/tweet')
-    print(request.form.get('accessToken'))
-    print(request.form.get('secret'))
-    print(request.form.get('description'))
-    print(request.form.get('filename'))
-
     post_with_large_file(
         request.form.get('accessToken'),
         request.form.get('secret'),
         request.form.get('description'),
-        os.path.join(config.UPLOAD_FOLDER, str(request.form.get('filename')))
+        #request.form.get('filename')
+        os.path.join(app.config['UPLOAD_FOLDER'], str(request.form.get('filename').split('/')[-1]))
     )
     
     return "OK"
 
 if __name__ == "__main__":
+    print("environment : " + environment.HOST)
     if environment.HOST == "DEV":
         app.run(debug=True)
     elif environment.HOST == "PROD" :

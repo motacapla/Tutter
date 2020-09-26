@@ -2,13 +2,16 @@ import numpy as np
 import cv2
 import matplotlib.pyplot as plt
 import os
-import config
 import math
 import requests
+import config
+import environment
+
+MIN_IMAGE_HEIGHT_WIDTH = 600
 
 def resize_img(img):
     img_height, img_width = img.shape[:2]
-    long_side_size = min(600, max(img_height, img_width))
+    long_side_size = min(MIN_IMAGE_HEIGHT_WIDTH, max(img_height, img_width))
     if img_height < img_width:        
         scale = img_width / long_side_size
         size = (long_side_size, math.ceil(img_height / scale))
@@ -25,12 +28,21 @@ def call_remove_bg_api(dt_now, path):
         headers = {'X-Api-Key': config.REMOVE_BG_KEY},
     )
     
-    filepath = os.path.join(config.UPLOAD_FOLDER, "no_bg_" + dt_now + ".png")
+    filepath = os.path.join(environment.UPLOAD_FOLDER, "no_bg_" + dt_now + ".png")
     with open(filepath, 'wb') as out:
         out.write(response.content)
         
     return filepath
 
+def convert_image_to_gyotaku(dt_now, path):
+    img_gray = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
+    filepath = os.path.join(environment.UPLOAD_FOLDER, "gyotaku_" + dt_now + ".png")
+    cv2.imwrite(filepath, img_gray)
+
+    return filepath
+
+
+"""
 def background_eliminate(img):
     BLUR = 21
     CANNY_THRESH_1 = 10
@@ -75,8 +87,6 @@ def background_eliminate(img):
     img_a = cv2.merge((c_red, c_green, c_blue, mask.astype('float32') / 255.0))
     return img_a
 
-"""
-
 def background_eliminate_type0(img):
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     img = img[...,::-1] 
@@ -104,8 +114,7 @@ def background_eliminate_type0(img):
     print("created mask")
 
     return apply_mask_to_img(img, mask)
-"""
-
+    
 # おそすぎるのでこいつ直して
 def apply_mask_to_img(img, mask):
     mylist = [(x, y) for x in range(len(mask)) for y in range(len(mask[0]))]
@@ -117,3 +126,5 @@ def apply_mask_to_img(img, mask):
             img[x, y, 2] = 255
 
     return img
+
+"""

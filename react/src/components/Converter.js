@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-
-const API_SERVER_HOST_URL = 'http://localhost:5000';
-const API_IMAGE = API_SERVER_HOST_URL + '/v1/image';
+import Image from 'react-bootstrap/Image';
+import Button from 'react-bootstrap/Button';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import {API_SERVER_HOST_URL} from './Config';
 
 class Converter extends Component {
     constructor(props) {
         super(props);
         this.state = {};
+        this.handleClick = this.handleClick.bind(this);
     }
 
     uploadFile(event) {
@@ -15,7 +19,11 @@ class Converter extends Component {
         let createObjectURL = (window.URL || window.webkitURL).createObjectURL || window.createObjectURL;
         this.setState({
           file: files[0],
-          originalImage: createObjectURL(files[0])
+          originalImage: {
+            filename: "originalImage",
+            url: createObjectURL(files[0]),
+            isSelected: false
+          }
         }, () => {
           this.sendFile();
         });
@@ -26,7 +34,7 @@ class Converter extends Component {
         params.append('file', this.state.file);
         axios
           .post(
-            API_IMAGE,
+            API_SERVER_HOST_URL + '/v1/image',
             params,
             {
               headers: {
@@ -35,48 +43,109 @@ class Converter extends Component {
             }
           )
           .then(response => {
-            this.setState({
-              savedFilename: response.data['filename']
-            });
-            this.setFilename();
-            this.receiveFile(response.data['filename']);
+            this.setState({isUploaded: true});
+            this.receiveFiles(response.data['filenameList']);
           })
           .catch(() => {
             console.log('sendFile failed');
           });
-      }
-      receiveFile(filename) {
-        axios
-          .get(API_IMAGE + "/" + filename, {responseType: 'arraybuffer'})
-          .then(response => {
-            const base64 = btoa(
-              new Uint8Array(response.data).reduce(
-                (data, byte) => data + String.fromCharCode(byte),
-                '',
-              ),
-            );
-            this.setState({ convertedImage: "data:;base64," + base64 });
-            console.log("receiveFile successed")
-          })
-          .catch(() => {
-            console.log('receiveFile failed');
-          });
-      }
+    }
 
-    setFilename() {
-        return this.props.setFilename(this.state.savedFilename);      
+    receiveFiles(filenameList) {
+      axios
+      .get(API_SERVER_HOST_URL + '/v1/images?filenameList=' + filenameList.join(','))
+      .then(response => {
+        this.setState({images: response.data.images.map(
+          (image, index) => {
+            return {
+              filename: "convertedImage"+index, 
+              url: image.url,
+              isSelected: false
+            }
+          }
+          )});
+      })
+      .catch(() => {
+        console.log('receiveFile failed');
+      }); 
+    }
+
+    handleClick(event) {
+      this.setFilename(event.target.value);
+      this.setOpenTweetDescription();
+      this.setIsSelected(event.target.value);
+    }
+
+    setFilename(url) {
+      return this.props.setFilename(url);      
+    }
+
+    setOpenTweetDescription() {
+      return this.props.setOpenTweetDescription(true);
+    }
+
+    setIsSelected(url) {
+      if (this.state.originalImage.url == url) {
+        this.state.originalImage.isSelected = true;
+        for (var i in this.state.images) {
+            this.state.images[i].isSelected = false;          
+        }
+      } else {
+        this.state.originalImage.isSelected = false;
+        for (var i in this.state.images) {
+          if (this.state.images[i].url == url) {
+            this.state.images[i].isSelected = true;
+          } else {
+            this.state.images[i].isSelected = false;
+          }
+        }
+      }      
+    }
+
+    getUrl(filename) {
+      if (this.state.originalImage.filename == filename) {
+        return this.state.originalImage.url;
+      } else {
+        for (var i in this.state.images) {
+          if (this.state.images[i].filename == filename) {
+            return this.state.images[i].url;
+          }
+        }
+      } 
     }
 
     render() {
+        let originalImage, convertedImages = [];
+        if (this.state.isUploaded) {
+          originalImage = 
+          <Col xs={6} md={4}>
+            <div className={this.state.originalImage.isSelected ? "SelectedImageButton" : "UnselectedImageButton"}>
+            <Image src={this.state.originalImage.url} thumbnail />
+            <Button variant="primary" value={this.getUrl("originalImage")} onClick={this.handleClick}>選択</Button>
+            </div>
+          </Col>          
+          for (var i in this.state.images){
+            convertedImages.push(
+              <Col xs={6} md={4}>
+                <div className={this.state.images[i].isSelected ? "SelectedImageButton" : "UnselectedImageButton"}>
+                <Image src={this.state.images[i].url} thumbnail />
+                <Button variant="primary" value={this.getUrl("convertedImage"+i)} onClick={this.handleClick}>選択</Button>
+                </div>
+              </Col>
+            );
+          }
+        }        
         return(
             <div className="Converter">
                 <form method="POST" encType="multipart/form-data">
                     <input type="file" name="image" accept="image/png, image/jpeg" onChange={this.uploadFile.bind(this)} />
                 </form>
-                <p>
-                <img src={this.state.originalImage} width="200" />
-                <img src={this.state.convertedImage} width="200" />
-                </p>
+                <Container className="ImageContainer">
+                  <Row>
+                    {originalImage}
+                    {convertedImages}
+                  </Row>
+                </Container>
             </div>
         );
     }

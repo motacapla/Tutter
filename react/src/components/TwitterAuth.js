@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import firebase, { provider } from '../FirebaseConfig';
 import '../App.js'
 import axios from 'axios';
-import TweetModal from './TweetModal';
+import TweetBuilder from './TweetBuilder';
 import Image from 'react-bootstrap/Image';
 import {API_SERVER_HOST_URL} from './Config';
 
@@ -61,7 +61,7 @@ class TwitterAuth extends Component {
     if (this.props.isLogin) {
       return (
         <div style={this.props.style}>
-          <TweetModal />
+          <TweetBuilder />
           <button className="BackgroundGrey Button" >Comming soon.</button> 
           <br/> 
           <button className="BackgroundDarkBlue Button" onClick={this.handleLogout}>ログアウト</button>

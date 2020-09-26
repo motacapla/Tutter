@@ -39,7 +39,7 @@ class App extends Component {
             <a href="/"><Image className="Logo" src={`${process.env.PUBLIC_URL}/Tutter-logo-white.png`} /></a>
             <div className="AppHeaderDescription">
               <h1>釣った魚と、思い出の一枚を。</h1>
-              <h1>自動生成した魚拓とツイートする</h1>
+              <h1>自動生成した魚拓と共にツイートする</h1>
             </div>
             <TwitterAuth setIsLogin={this.setIsLogin} isLogin={this.state.isLogin}/>
           </div>
