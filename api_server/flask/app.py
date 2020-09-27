@@ -24,7 +24,7 @@ def random_str(n):
     return ''.join([random.choice(string.ascii_letters + string.digits) for i in range(n)])
 
 @app.route("/v1/image", methods = ["POST"])
-def upload():
+def upload(supports_credentials=True):
     if request.files['file']:
         stream = request.files['file'].stream
         img_array = np.asarray(bytearray(stream.read()), dtype=np.uint8)
@@ -37,8 +37,11 @@ def upload():
         cv2.imwrite(save_path, img)
 
         save_path_list = []
-        save_path_list.append(image_converter.background_eliminate_deeplabv3_resnet101(dt_now, save_path).split('/')[-1])
-        save_path_list.append(image_converter.convert_image_to_gyotaku(dt_now, save_path).split('/')[-1])
+        no_bg_save_path = image_converter.background_eliminate_deeplabv3_resnet101(dt_now, save_path)
+        save_path_list.append(no_bg_save_path.split('/')[-1])
+        gyotaku_save_path = image_converter.convert_image_to_gyotaku(dt_now, no_bg_save_path)
+        save_path_list.append(gyotaku_save_path.split('/')[-1])
+
         # This can be used 50 times per month :cry:
         # save_path_list.append(image_converter.call_remove_bg_api(dt_now, save_path).split('/')[-1])
 
@@ -48,11 +51,11 @@ def upload():
         return response
 
 @app.route('/v1/image/<path:path>', methods = ["GET"])
-def get_image(path):
+def get_image(path, supports_credentials=True):
     return send_from_directory(app.config['UPLOAD_FOLDER'], path)
 
 @app.route('/v1/images', methods = ["GET"])
-def get_images_url():
+def get_images_url(supports_credentials=True):
     def create_image_response(filename):
         return {
             "filename": filename,
@@ -80,7 +83,7 @@ def tweet_credentials(supports_credentials=True):
         return credentials
 
 @app.route('/v1/tweet', methods = ["POST"])
-def tweet():
+def tweet(supports_credentials=True):
     print(str(request.form.get('filename').split('/')[-1]))
     post_with_large_file(
         request.form.get('accessToken'),
