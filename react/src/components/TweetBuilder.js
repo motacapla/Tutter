@@ -17,10 +17,6 @@ class TweetBuilder extends Component {
     this.setOpenTweetDescription = this.setOpenTweetDescription.bind(this);
   }
 
-  componentDidMount() {
-    console.log(this.state);
-  }
-
   handleChange (event) {
     this.setState({text: event.target.value});
   }
@@ -72,7 +68,6 @@ class TweetBuilder extends Component {
   }
 
   render() {
-    console.log(this.state);
     return (
       <div className="TweetBody">   
       <button className="BackgroundBlue Button"

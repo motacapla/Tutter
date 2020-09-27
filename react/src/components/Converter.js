@@ -6,6 +6,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import {API_SERVER_HOST_URL} from './Config';
+import LoadingScreen from './LoadingScreen';
 
 class Converter extends Component {
     constructor(props) {
@@ -30,6 +31,7 @@ class Converter extends Component {
     };
 
     sendFile() {
+        this.setState({isLoading: true});
         const params = new FormData();
         params.append('file', this.state.file);
         axios
@@ -43,10 +45,12 @@ class Converter extends Component {
             }
           )
           .then(response => {
+            this.setState({isLoading: false});
             this.setState({isUploaded: true});
             this.receiveFiles(response.data['filenameList']);
           })
           .catch(() => {
+            this.setState({isLoading: false});
             console.log('sendFile failed');
           });
     }
@@ -115,6 +119,7 @@ class Converter extends Component {
     }
 
     render() {
+        let loadScreen = this.state.isLoading ? <LoadingScreen /> : null
         let originalImage, convertedImages = [];
         if (this.state.isUploaded) {
           originalImage = 
@@ -139,7 +144,8 @@ class Converter extends Component {
             <div className="Converter">
                 <form method="POST" encType="multipart/form-data">
                     <input type="file" name="image" accept="image/png, image/jpeg" onChange={this.uploadFile.bind(this)} />
-                </form>
+                </form> 
+                {loadScreen}               
                 <Container className="ImageContainer">
                   <Row>
                     {originalImage}
