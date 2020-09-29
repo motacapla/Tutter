@@ -1,13 +1,14 @@
 import os
 import cv2
+import json
 import random
 import string
 import numpy as np
-from flask import Flask, request, redirect, url_for, send_from_directory, render_template, session
+from flask import Flask, request, redirect, url_for, send_from_directory, render_template, session, Response
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
 from datetime import datetime
-from post_twitter import post_with_large_file
+from post_twitter import post_with_large_file, get_me
 import config
 import environment
 import image_converter
@@ -84,14 +85,28 @@ def tweet_credentials(supports_credentials=True):
 
 @app.route('/v1/tweet', methods = ["POST"])
 def tweet(supports_credentials=True):
-    print(str(request.form.get('filename').split('/')[-1]))
+    access_token = session.get('accessToken')
+    secret = session.get('secret')
+    if access_token == None or secret == None:
+        return Response(response=json.dumps({'error': 'Invalid credentials'}), status=400)
     post_with_large_file(
-        request.form.get('accessToken'),
-        request.form.get('secret'),
+        access_token,
+        secret,
         request.form.get('description'),
         os.path.join(app.config['UPLOAD_FOLDER'], str(request.form.get('filename').split('/')[-1]))
     )
     return "OK"
+
+@app.route('/v1/twitterProfile', methods = ['GET'])
+def twitter_user(supports_credentials=True):
+    access_token = session.get('accessToken')
+    secret = session.get('secret')
+    if access_token == None or secret == None:
+        return Response(response=json.dumps({'error': 'Invalid credentials'}), status=400)
+    return get_me(
+        access_token,
+        secret
+    )
 
 if __name__ == "__main__":
     print("environment : " + environment.HOST)

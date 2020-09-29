@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import Converter from './Converter';
 import Form from 'react-bootstrap/Form';
 import Collapse from 'react-bootstrap/Collapse';
 import {API_SERVER_HOST_URL} from './Config';
+import Converter from './Converter';
+import TwitterProfile from './TwitterProfile';
 
 class TweetBuilder extends Component {
   constructor(props) {
@@ -32,16 +33,14 @@ class TweetBuilder extends Component {
         params.append('description', description);
         params.append('filename', this.state.filename); 
 
-        console.log()
-
         axios
-        .post(API_SERVER_HOST_URL + "/v1/tweet", params)
+        .post(API_SERVER_HOST_URL + "/v1/tweet", params, {withCredentials: true})
           .then(() => {
             alert("投稿しました!\n 自動的に戻ります");
           })
           .catch(() => {
-            console.log('handleSubmit failed');
             alert('投稿できませんでした\n 再度ログインしてお試しください');
+            console.log('handleSubmit failed');
           });
       })
       .catch(() => {
@@ -70,6 +69,7 @@ class TweetBuilder extends Component {
   render() {
     return (
       <div className="TweetBody">   
+      <TwitterProfile />
       <button className="BackgroundBlue Button"
         onClick={() => this.setOpenTweetForm()}
         aria-expanded={this.state.openTweetForm}

@@ -11,7 +11,6 @@ class TwitterAuth extends Component {
     super(props);
     this.state = {};
     this.handleLogin = this.handleLogin.bind(this);
-    this.handleLogout = this.handleLogout.bind(this);
     this.setIsLogin = this.setIsLogin.bind(this);
   }
 
@@ -45,14 +44,6 @@ class TwitterAuth extends Component {
     });
   }
 
-  handleLogout = () => {
-    firebase.auth().signOut().then(function() {
-      console.log("logout");
-    }).catch(function(error) {
-      console.log(error);
-    });
-  }
-
   setIsLogin(bool) {
     return this.props.setIsLogin(bool);      
   }
@@ -62,9 +53,7 @@ class TwitterAuth extends Component {
       return (
         <div style={this.props.style}>
           <TweetBuilder />
-          <button className="BackgroundGrey Button" >Comming soon.</button> 
-          <br/> 
-          <button className="BackgroundDarkBlue Button" onClick={this.handleLogout}>ログアウト</button>
+          <button className="BackgroundGrey Button" >Comming soon.</button>
         </div>
       );
     } else {
