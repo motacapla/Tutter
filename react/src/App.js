@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import TwitterAuth from './components/TwitterAuth';
 import AppCardDeck from './components/AppCardDeck';
+import AppFooter from './components/AppFooter';
+import TwitterHashtag from './components/TwitterHashtag';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Image from 'react-bootstrap/Image';
@@ -26,10 +28,7 @@ class App extends Component {
           <div className="AppBody">
             <TwitterAuth setIsLogin={this.setIsLogin} isLogin={this.state.isLogin}/>
           </div>
-          <div className="AppFooter">
-            github
-            twitter
-          </div>
+          <AppFooter />
         </div>
       );
     } else {
@@ -46,10 +45,7 @@ class App extends Component {
           <div className="AppBody">
             <AppCardDeck />
           </div>
-          <div className="AppFooter">
-            github
-            twitter
-          </div>
+          <AppFooter />
         </div>
       );
     }

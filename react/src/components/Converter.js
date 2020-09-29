@@ -126,7 +126,7 @@ class Converter extends Component {
           <Col xs={6} md={4}>
             <div className={this.state.originalImage.isSelected ? "SelectedImageButton" : "UnselectedImageButton"}>
             <Image src={this.state.originalImage.url} thumbnail />
-            <Button variant="primary" value={this.getUrl("originalImage")} onClick={this.handleClick}>選択</Button>
+            <Button className="ImageButton" variant="primary" value={this.getUrl("originalImage")} onClick={this.handleClick}>選択</Button>
             </div>
           </Col>          
           for (var i in this.state.images){
@@ -134,7 +134,7 @@ class Converter extends Component {
               <Col xs={6} md={4}>
                 <div className={this.state.images[i].isSelected ? "SelectedImageButton" : "UnselectedImageButton"}>
                 <Image src={this.state.images[i].url} thumbnail />
-                <Button variant="primary" value={this.getUrl("convertedImage"+i)} onClick={this.handleClick}>選択</Button>
+                <Button className="ImageButton" variant="primary" value={this.getUrl("convertedImage"+i)} onClick={this.handleClick}>選択</Button>
                 </div>
               </Col>
             );

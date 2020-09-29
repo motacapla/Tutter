@@ -14,7 +14,6 @@ class TwitterProfile extends Component {
         .then(response => {
             if (response.data['accessToken'] != null && response.data['secret'] != null) {
                 axios
-                //.get(API_SERVER_HOST_URL + "/v1/twitterProfile?accessToken=" + response.data['accessToken'] + "&secret=" + response.data['secret'], {withCredentials: true})
                 .get(API_SERVER_HOST_URL + "/v1/twitterProfile", {withCredentials: true})
                 .then(response => {
                     this.setState({
@@ -25,7 +24,7 @@ class TwitterProfile extends Component {
                 .catch(() => {
                     console.log('twitterProfile failed');
                 });       
-            }            
+            }
         })
         .catch(() => {
             console.log('twitterCredentials failed');

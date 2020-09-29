@@ -4,6 +4,7 @@ import '../App.js'
 import axios from 'axios';
 import TweetBuilder from './TweetBuilder';
 import Image from 'react-bootstrap/Image';
+import Card from 'react-bootstrap/Card';
 import {API_SERVER_HOST_URL} from './Config';
 
 class TwitterAuth extends Component {
@@ -51,9 +52,16 @@ class TwitterAuth extends Component {
   render() {
     if (this.props.isLogin) {
       return (
-        <div style={this.props.style}>
+        <div className="TwitterAuthBody" style={this.props.style}>
           <TweetBuilder />
-          <button className="BackgroundGrey Button" >Comming soon.</button>
+          <Card className="Card">
+            <Image className="TweetCardImage" src={`${process.env.PUBLIC_URL}/Tutter-content-comingsoon-button.jpg`} />        
+            <Card.Body>
+              <Card.Title><h1>Comming soon...</h1></Card.Title>
+              <Card.Text>
+              </Card.Text>
+            </Card.Body>
+          </Card>
         </div>
       );
     } else {

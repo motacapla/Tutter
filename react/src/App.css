@@ -1,5 +1,8 @@
 .App {
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 .AppHeader {
@@ -14,16 +17,23 @@
 
 .AppBody {
   margin-top: 3em;
+  margin-bottom: 3em;
   margin-left: 3em;
   margin-right: 3em;
 }
 
 .AppFooter {
   margin-top: 3em;
-  padding-top: 1em;
-  text-align: center;
   background-color: #212333;
+  text-align: right;
   color: white;
+  margin-top: auto;
+}
+
+.FooterButton {
+  padding-top: 1%;
+  padding-bottom: 1%;
+  margin-right: 1em;
 }
 
 .Logo {
@@ -57,6 +67,25 @@
   margin-bottom: 20px;
 }
 
+.LogoutButton {
+  -moz-transition: background-color 0.2s ease-in-out;
+  -webkit-transition: background-color 0.2s ease-in-out;
+  -o-transition: background-color 0.2s ease-in-out;
+  -ms-transition: background-color 0.2s ease-in-out;
+  transition: background-color 0.2s ease-in-out;
+  border-radius: 40px;
+  border: 0;
+  cursor: pointer;
+  color: white;
+  display: inline-block;
+  padding: 0.50em 1.5em;
+  text-align: center;
+  text-decoration: none;
+  min-width: 10em;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
 .BackgroundBlue {
   background: #1DA1F2;
 }
@@ -78,6 +107,83 @@
   background: rgb(99, 99, 99);
 }
 
+.Card {
+  margin-top: 2%;
+  color: gray;
+}
+
+.TweetCardImage {
+  padding-top: 1%;
+  padding-right: 1%;
+  padding-left: 1%;
+  height: 250px;
+  object-fit: cover;
+}
+
+.TweetCardTitle {
+  color: #212333;
+}
+
+.TweetCardText {
+  color: #212333;
+}
+
+.TweetForm {
+  padding-top: 1%;
+}
+
 .ImageForm {
-  margin-top: 1em; 
+  margin-bottom: 3%; 
+}
+
+.ImageFormTitle {
+  margin-left: 5%; 
+  margin-bottom: 3%; 
+  text-align: left;
+}
+
+.DescriptionFormt {
+  margin-top: 2em; 
+}
+
+.TwitterProfile {
+  text-align: right;
+  font-size: 1.4em;
+  font-weight: 300;
+  border-bottom: solid 3px #212333;
+  margin-bottom: 1em;
+
+}
+
+.TwitterIcon .TwitterName {
+  margin-left: 1em;
+  margin-right: 1em;
+}
+
+.ImageContainer {
+  margin-top: 1%; 
+}
+
+.LoadingScreen {
+  margin-top: 1%; 
+}
+
+.ImageButton {
+  margin-top: 1%;
+  margin-bottom: 1%;
+}
+
+.TextArea {
+  margin-top: 1%; 
+  margin-right: 5%;
+  margin-left: 5%;
+  text-align: left;
+}
+
+.SelectedImageButton {
+  font-weight: bold;
+  color: #1DA1F2;
+  background: #FFF;
+  border: solid 3px #1DA1F2;
+  border-radius: 10px;
 }

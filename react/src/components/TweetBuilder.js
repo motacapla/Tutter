@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import Form from 'react-bootstrap/Form';
 import Collapse from 'react-bootstrap/Collapse';
+import Card from 'react-bootstrap/Card';
+import Image from 'react-bootstrap/Image';
 import {API_SERVER_HOST_URL} from './Config';
 import Converter from './Converter';
 import TwitterProfile from './TwitterProfile';
@@ -66,20 +68,30 @@ class TweetBuilder extends Component {
     this.setState({openTweetForm: !this.state.openTweetForm});
   }
 
+  getOpenTweetForm () {
+    return this.state.openTweetForm;
+  }
+
   render() {
     return (
       <div className="TweetBody">   
       <TwitterProfile />
-      <button className="BackgroundBlue Button"
-        onClick={() => this.setOpenTweetForm()}
-        aria-expanded={this.state.openTweetForm}
-      >
-        ツイートする
-      </button>
-      <Collapse in = {this.state.openTweetForm}>
+      <Card>
+        <Image className="TweetCardImage" src={`${process.env.PUBLIC_URL}/Tutter-content-tweet-button.jpg`} />
+        
+        <Card.Body
+                onClick={() => this.setOpenTweetForm()}
+                aria-expanded={this.state.openTweetForm}
+        >
+          <Card.Title className="TweetCardTitle"><h1>ツイートする</h1></Card.Title>
+          <Card.Text className="TweetCardText">
+            アップロードした画像は自動的に変換され、ツイートに添付されます
+          </Card.Text>
+        </Card.Body>
+        <Collapse in = {this.state.openTweetForm}>
         <div className="TweetForm">
           <div className="ImageForm">
-            <h3>1. 投稿画像を選択</h3>
+            <h2 className="ImageFormTitle">1. 画像を選択</h2>
             <Converter setFilename={this.setFilename} setOpenTweetDescription={this.setOpenTweetDescription} />
           </div>
           <div className="DescriptionForm">
@@ -88,7 +100,7 @@ class TweetBuilder extends Component {
             <div className="TextArea">
               <Form>
                 <Form.Group controlId="ControlTextarea1">
-                  <Form.Label><h3>2. ツイートの投稿文章を入れる (140字以内)</h3></Form.Label>
+                  <Form.Label><h2>2. ツイート内容</h2></Form.Label>
                   <Form.Control as="textarea" rows="3" onChange={this.handleChange} />
                 </Form.Group>
               </Form>
@@ -99,6 +111,7 @@ class TweetBuilder extends Component {
           </div>          
         </div>
       </Collapse>
+      </Card>
       </div>
     );
   }  
